@@ -12,7 +12,7 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
 from django.contrib.auth.models import User
-from django.contrib.auth import PermissionDenied
+from django.contrib.auth import PermissionDenied,Permission
 from django.contrib.auth import authenticate, login, logout
 from django.forms.models import model_to_dict
 from .models import SteamPlayer
@@ -132,6 +132,27 @@ def login_required(func):
             )
     return wrapper
 
+def admin_login_required(func):
+    @wraps(func)
+    def wrapper(request, *args, **kwargs):
+        if not request.user.is_authenticated or request.user.has_perm('rconweb.admin_rights'):
+            return api_response(
+                command=request.path,
+                error="You must be logged in as an Admin to do this",
+                failed=True,
+                status_code=401
+            )
+        try:
+            return func(request, *args, **kwargs)
+        except Exception as e:
+            logger.exception("Unexpected error in %s - env: %s", func.__name__, os.environ)
+            return api_response(
+                command=request.path,
+                error=repr(e),
+                failed=True,
+                status_code=500
+            )
+    return wrapper
 
 # Login required?
 @csrf_exempt
