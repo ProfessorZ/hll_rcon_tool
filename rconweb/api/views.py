@@ -224,7 +224,7 @@ def get_player(request):
 
 
 @csrf_exempt
-@login_required
+@admin_login_required
 def flag_player(request):
     data = _get_data(request)
     res = None
@@ -252,7 +252,7 @@ def flag_player(request):
     return JsonResponse(
         {"result": res, "command": "flag_player", "arguments": data, "failed": not res}
     )
-
+    
 
 @csrf_exempt
 @login_required
