@@ -74,19 +74,19 @@ LOGGING = {
 }
 
 
-sentry_logging = LoggingIntegration(
-    level=logging.DEBUG,       # Capture debug and above as breadcrumbs
-    event_level=logging.ERROR  # Send errors as events
-)
-
-# Switch to public integration if possible
-sentry_sdk.init(
-    dsn="https://78c97168e38343e9aba5435aebd94b2b@o60943.ingest.sentry.io/5220965",
-    integrations=[DjangoIntegration(), sentry_logging],
-    release=os.getenv("RELEASE_TAG", "dev"),
-    environment=os.getenv('ENV', ENVIRONMENT),
-    send_default_pii=True
-)
+# sentry_logging = LoggingIntegration(
+#     level=logging.DEBUG,       # Capture debug and above as breadcrumbs
+#     event_level=logging.ERROR  # Send errors as events
+# )
+#
+# # Switch to public integration if possible
+# sentry_sdk.init(
+#     dsn="https://78c97168e38343e9aba5435aebd94b2b@o60943.ingest.sentry.io/5220965",
+#     integrations=[DjangoIntegration(), sentry_logging],
+#     release=os.getenv("RELEASE_TAG", "dev"),
+#     environment=os.getenv('ENV', ENVIRONMENT),
+#     send_default_pii=True
+# )
 
 with configure_scope() as scope:
     scope.set_extra("instance", ENVIRONMENT)
